@@ -15,7 +15,7 @@ class _SigninscreenState extends State<SignupScreen> {
       body: Center(
         child: Column(
           children: [
-            //welcome Image
+            //welcome vector Image
             SizedBox(
               height: 100,
             ),
