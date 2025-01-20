@@ -1,4 +1,4 @@
-import 'package:edu_track/view/signup_screen.dart';
+import 'package:edu_track/view/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,7 +11,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SignupScreen(),
+      debugShowCheckedModeBanner: false,
+      home: Welcome(),
     );
   }
 }
