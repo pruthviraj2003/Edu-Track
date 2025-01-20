@@ -21,4 +21,6 @@ flutter:
 
   assets:
     - lib/assets/welcomeImage.png
+    - lib/assets/signinvector.png
+    - lib/assets/user.png
 

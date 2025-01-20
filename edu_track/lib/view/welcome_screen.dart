@@ -1,3 +1,5 @@
+import 'package:edu_track/view/signin_screen.dart';
+import 'package:edu_track/view/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -37,7 +39,12 @@ class _WelcomeState extends State<Welcome> {
               height: 65,
               width: 267,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SigninScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                   ),
@@ -61,7 +68,12 @@ class _WelcomeState extends State<Welcome> {
                   style: GoogleFonts.poppins(),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignupScreen()));
+                  },
                   child: Text(
                     "Sign Up",
                     style: GoogleFonts.poppins(fontWeight: FontWeight.w600),

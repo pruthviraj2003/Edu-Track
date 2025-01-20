@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class SigninScreen extends StatefulWidget {
+  const SigninScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SigninscreenState();
+  State<SigninScreen> createState() => _SigninscreenState();
 }
 
-class _SigninscreenState extends State<SignupScreen> {
+class _SigninscreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,54 +17,19 @@ class _SigninscreenState extends State<SignupScreen> {
           children: [
             //welcome Image
             SizedBox(
-              height: 100,
+              height: 150,
             ),
             SizedBox(
-              height: 120,
-              width: 120,
+              height: 180,
+              width: 180,
               child: Image.asset('lib/assets/user.png'),
             ),
             SizedBox(
               height: 20,
             ),
-
-            //Pannel Selection
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  height: 46,
-                  width: 104,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue,
-                  ),
-                ),
-                Container(
-                  height: 46,
-                  width: 104,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue,
-                  ),
-                ),
-                Container(
-                  height: 46,
-                  width: 104,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.blue,
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
             //Title
             Text(
-              "Sign Up",
+              "Sign In",
               style: GoogleFonts.poppins(
                   fontSize: 36, fontWeight: FontWeight.w600),
             ),
@@ -100,12 +65,17 @@ class _SigninscreenState extends State<SignupScreen> {
               height: 65,
               width: 267,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SigninScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                   ),
                   child: Text(
-                    "Sign Up",
+                    "Sign In",
                     style: GoogleFonts.poppins(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
