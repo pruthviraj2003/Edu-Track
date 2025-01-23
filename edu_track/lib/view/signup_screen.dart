@@ -1,3 +1,4 @@
+import 'package:edu_track/view/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -40,6 +41,14 @@ class _SigninscreenState extends State<SignupScreen> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.blue,
                   ),
+                  child: Center(
+                      child: Text(
+                    "Student",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  )),
                 ),
                 Container(
                   height: 46,
@@ -48,6 +57,14 @@ class _SigninscreenState extends State<SignupScreen> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.blue,
                   ),
+                  child: Center(
+                      child: Text(
+                    "Teacher",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  )),
                 ),
                 Container(
                   height: 46,
@@ -56,6 +73,14 @@ class _SigninscreenState extends State<SignupScreen> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.blue,
                   ),
+                  child: Center(
+                      child: Text(
+                    "Admin",
+                    style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  )),
                 )
               ],
             ),
@@ -73,9 +98,20 @@ class _SigninscreenState extends State<SignupScreen> {
             ),
             //Email Field
             Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(5),
               child: TextField(
                 textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(5),
+              child: TextField(
                 decoration: InputDecoration(
                   labelText: "Email",
                   border: OutlineInputBorder(
@@ -85,7 +121,7 @@ class _SigninscreenState extends State<SignupScreen> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(5),
               child: TextField(
                 decoration: InputDecoration(
                   labelText: "Password",
@@ -95,12 +131,31 @@ class _SigninscreenState extends State<SignupScreen> {
                 ),
               ),
             ),
+            Container(
+              padding: EdgeInsets.all(5),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: "Confirm Password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
             //Button
             SizedBox(
               height: 65,
               width: 267,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SigninScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                   ),
