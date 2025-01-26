@@ -1,3 +1,4 @@
+import 'package:edu_track/view/student_section/student_main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -69,7 +70,7 @@ class _SigninscreenState extends State<SigninScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SigninScreen()));
+                            builder: (context) => const StudentMain()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
