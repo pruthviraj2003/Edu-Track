@@ -35,11 +35,11 @@ class _StudentMainState extends State<StudentMain> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: onTap,
-        iconSize: 30,
+        iconSize: 40,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.home,
+              Icons.home_outlined,
               color: Colors.black,
             ),
             label: "",

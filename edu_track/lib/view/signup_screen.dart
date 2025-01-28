@@ -1,6 +1,8 @@
 import 'package:edu_track/view/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -11,6 +13,48 @@ class SignupScreen extends StatefulWidget {
 
 class _SigninscreenState extends State<SignupScreen> {
   String selectedRole = "";
+
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+
+  String? _role; // Selected role
+  String _name = '', _email = '', _password = '';
+
+  // Sign-Up Logic
+  Future<void> _signUp() async {
+    if (_role == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Please select a role"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+    try {
+      final user = await _auth.createUserWithEmailAndPassword(
+        email: _email,
+        password: _password,
+      );
+
+      // Store user in the correct Firestore collection
+      await _firestore
+          .collection(_role!.toLowerCase() + "s")
+          .doc(user.user!.uid)
+          .set({
+        'name': _name,
+        'email': _email,
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SigninScreen()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString()),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,86 +74,22 @@ class _SigninscreenState extends State<SignupScreen> {
                 height: 20,
               ),
 
-              //Pannel Selection
-
+              // Role Selection
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedRole = "Student";
-                      });
-                    },
-                    child: Container(
-                      height: 46,
-                      width: 104,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: selectedRole == "Student"
-                            ? Colors.blue
-                            : Colors.grey.shade400,
+                  for (String role in ['Student', 'Teacher', 'Admin'])
+                    ElevatedButton(
+                      onPressed: () => setState(() => _role = role),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            _role == role ? Colors.blue : Colors.grey,
                       ),
-                      child: Center(
-                          child: Text(
-                        "Student",
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedRole = "Teacher";
-                      });
-                    },
-                    child: Container(
-                      height: 46,
-                      width: 104,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: selectedRole == "Teacher"
-                            ? Colors.blue
-                            : Colors.grey.shade400,
+                      child: Text(
+                        role,
+                        style: GoogleFonts.poppins(color: Colors.white),
                       ),
-                      child: Center(
-                          child: Text(
-                        "Teacher",
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      )),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedRole = "Admin";
-                      });
-                    },
-                    child: Container(
-                      height: 46,
-                      width: 104,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: selectedRole == "Admin"
-                            ? Colors.blue
-                            : Colors.grey.shade400,
-                      ),
-                      child: Center(
-                          child: Text(
-                        "Admin",
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      )),
-                    ),
-                  )
                 ],
               ),
               SizedBox(
@@ -128,6 +108,7 @@ class _SigninscreenState extends State<SignupScreen> {
               Container(
                 padding: EdgeInsets.all(5),
                 child: TextField(
+                  onChanged: (value) => _name = value,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     labelText: "Name",
@@ -140,6 +121,7 @@ class _SigninscreenState extends State<SignupScreen> {
               Container(
                 padding: EdgeInsets.all(5),
                 child: TextField(
+                  onChanged: (value) => _email = value,
                   decoration: InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(
@@ -151,6 +133,7 @@ class _SigninscreenState extends State<SignupScreen> {
               Container(
                 padding: EdgeInsets.all(5),
                 child: TextField(
+                  onChanged: (value) => _password = value,
                   decoration: InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(
@@ -179,10 +162,7 @@ class _SigninscreenState extends State<SignupScreen> {
                 width: 267,
                 child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SigninScreen()));
+                      _signUp();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
