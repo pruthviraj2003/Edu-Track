@@ -10,11 +10,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SigninscreenState extends State<SignupScreen> {
-  bool stdFlag = false;
-  bool teacherFlag = false;
-  bool adminFLag = false;
-  Color textClr = Colors.black;
-  Color buttonClr = Colors.grey;
+  String selectedRole = "";
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +21,6 @@ class _SigninscreenState extends State<SignupScreen> {
           child: Column(
             children: [
               //welcome vector Image
-              SizedBox(
-                height: 100,
-              ),
               SizedBox(
                 height: 120,
                 width: 120,
@@ -45,11 +38,7 @@ class _SigninscreenState extends State<SignupScreen> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        stdFlag = true;
-                        teacherFlag = false;
-                        adminFLag = false;
-                        textClr = Colors.white;
-                        buttonClr = Colors.blue;
+                        selectedRole = "Student";
                       });
                     },
                     child: Container(
@@ -57,14 +46,16 @@ class _SigninscreenState extends State<SignupScreen> {
                       width: 104,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: buttonClr,
+                        color: selectedRole == "Student"
+                            ? Colors.blue
+                            : Colors.grey.shade400,
                       ),
                       child: Center(
                           child: Text(
                         "Student",
                         style: GoogleFonts.poppins(
                             fontSize: 14,
-                            color: textClr,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold),
                       )),
                     ),
@@ -72,11 +63,7 @@ class _SigninscreenState extends State<SignupScreen> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        stdFlag = false;
-                        teacherFlag = true;
-                        adminFLag = false;
-                        textClr = Colors.white;
-                        buttonClr = Colors.blue;
+                        selectedRole = "Teacher";
                       });
                     },
                     child: Container(
@@ -84,14 +71,16 @@ class _SigninscreenState extends State<SignupScreen> {
                       width: 104,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: buttonClr,
+                        color: selectedRole == "Teacher"
+                            ? Colors.blue
+                            : Colors.grey.shade400,
                       ),
                       child: Center(
                           child: Text(
                         "Teacher",
                         style: GoogleFonts.poppins(
                             fontSize: 14,
-                            color: textClr,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold),
                       )),
                     ),
@@ -99,11 +88,7 @@ class _SigninscreenState extends State<SignupScreen> {
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        stdFlag = false;
-                        teacherFlag = false;
-                        adminFLag = true;
-                        textClr = Colors.white;
-                        buttonClr = Colors.blue;
+                        selectedRole = "Admin";
                       });
                     },
                     child: Container(
@@ -111,14 +96,16 @@ class _SigninscreenState extends State<SignupScreen> {
                       width: 104,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: buttonClr,
+                        color: selectedRole == "Admin"
+                            ? Colors.blue
+                            : Colors.grey.shade400,
                       ),
                       child: Center(
                           child: Text(
                         "Admin",
                         style: GoogleFonts.poppins(
                             fontSize: 14,
-                            color: textClr,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold),
                       )),
                     ),
