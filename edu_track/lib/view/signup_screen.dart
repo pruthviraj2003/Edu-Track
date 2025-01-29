@@ -8,20 +8,38 @@ class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SigninscreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SigninscreenState extends State<SignupScreen> {
-  String selectedRole = "";
-
+class _SignupScreenState extends State<SignupScreen> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
   String? _role; // Selected role
-  String _name = '', _email = '', _password = '';
+  String _name = '', _email = '', _password = '', _confirmPassword = '';
 
   // Sign-Up Logic
   Future<void> _signUp() async {
+    // Validate input fields
+    if (_name.isEmpty ||
+        _email.isEmpty ||
+        _password.isEmpty ||
+        _confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("All fields are required"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
+    if (_password != _confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Passwords do not match"),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
     if (_role == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Please select a role"),
@@ -29,26 +47,35 @@ class _SigninscreenState extends State<SignupScreen> {
       ));
       return;
     }
+
     try {
-      final user = await _auth.createUserWithEmailAndPassword(
+      // Create the user in Firebase Auth
+      final userCredential = await _auth.createUserWithEmailAndPassword(
         email: _email,
         password: _password,
       );
 
-      // Store user in the correct Firestore collection
-      await _firestore
-          .collection(_role!.toLowerCase() + "s")
-          .doc(user.user!.uid)
-          .set({
+      // Store user details in Firestore
+      await _firestore.collection("users").doc(userCredential.user!.uid).set({
         'name': _name,
         'email': _email,
+        'role': _role, // Store role here
+        'createdAt': FieldValue.serverTimestamp(),
       });
 
+      // Navigate to Sign-in screen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SigninScreen()),
       );
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Sign up successful! Please log in."),
+        backgroundColor: Colors.green,
+      ));
     } catch (e) {
+      // Handle errors (e.g., email already in use)
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),
         backgroundColor: Colors.red,
@@ -64,15 +91,13 @@ class _SigninscreenState extends State<SignupScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              //welcome vector Image
+              // Welcome vector image
               SizedBox(
                 height: 120,
                 width: 120,
                 child: Image.asset('lib/assets/user.png'),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
 
               // Role Selection
               Row(
@@ -92,24 +117,21 @@ class _SigninscreenState extends State<SignupScreen> {
                     ),
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
-              //Title
+              const SizedBox(height: 10),
+
+              // Title
               Text(
                 "Sign Up",
                 style: GoogleFonts.poppins(
                     fontSize: 36, fontWeight: FontWeight.w600),
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              //Email Field
-              Container(
-                padding: EdgeInsets.all(5),
+              const SizedBox(height: 15),
+
+              // Name Field
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   onChanged: (value) => _name = value,
-                  textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     labelText: "Name",
                     border: OutlineInputBorder(
@@ -118,8 +140,10 @@ class _SigninscreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(5),
+
+              // Email Field
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   onChanged: (value) => _email = value,
                   decoration: InputDecoration(
@@ -130,9 +154,12 @@ class _SigninscreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(5),
+
+              // Password Field
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  obscureText: true,
                   onChanged: (value) => _password = value,
                   decoration: InputDecoration(
                     labelText: "Password",
@@ -142,9 +169,13 @@ class _SigninscreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.all(5),
+
+              // Confirm Password Field
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  obscureText: true,
+                  onChanged: (value) => _confirmPassword = value,
                   decoration: InputDecoration(
                     labelText: "Confirm Password",
                     border: OutlineInputBorder(
@@ -153,17 +184,14 @@ class _SigninscreenState extends State<SignupScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              //Button
+              const SizedBox(height: 15),
+
+              // Sign Up Button
               SizedBox(
                 height: 65,
                 width: 267,
                 child: ElevatedButton(
-                    onPressed: () {
-                      _signUp();
-                    },
+                    onPressed: _signUp,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                     ),

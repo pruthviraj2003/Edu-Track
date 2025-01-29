@@ -1,0 +1,14 @@
+import "package:flutter/material.dart";
+
+class TeacherHomePage extends StatelessWidget {
+  const TeacherHomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text("Teachers Home Page"),
+      ),
+    );
+  }
+}
