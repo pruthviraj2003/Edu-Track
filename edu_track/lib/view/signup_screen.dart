@@ -16,12 +16,16 @@ class _SignupScreenState extends State<SignupScreen> {
   final _firestore = FirebaseFirestore.instance;
 
   String? _role; // Selected role
-  String _name = '', _email = '', _password = '', _confirmPassword = '';
+  String _firstName = '',
+      _lastName = '',
+      _email = '',
+      _password = '',
+      _confirmPassword = '';
 
   // Sign-Up Logic
   Future<void> _signUp() async {
-    // Validate input fields
-    if (_name.isEmpty ||
+    if (_firstName.isEmpty ||
+        _lastName.isEmpty ||
         _email.isEmpty ||
         _password.isEmpty ||
         _confirmPassword.isEmpty) {
@@ -49,7 +53,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     try {
-      // Create the user in Firebase Auth
+      // Create user in Firebase Auth
       final userCredential = await _auth.createUserWithEmailAndPassword(
         email: _email,
         password: _password,
@@ -57,9 +61,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
       // Store user details in Firestore
       await _firestore.collection("users").doc(userCredential.user!.uid).set({
-        'name': _name,
+        'firstName': _firstName,
+        'lastName': _lastName,
         'email': _email,
-        'role': _role, // Store role here
+        'role': _role,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
@@ -74,8 +79,6 @@ class _SignupScreenState extends State<SignupScreen> {
         backgroundColor: Colors.green,
       ));
     } catch (e) {
-      // Handle errors (e.g., email already in use)
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString()),
         backgroundColor: Colors.red,
@@ -91,7 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Welcome vector image
+              // Welcome Image
               SizedBox(
                 height: 120,
                 width: 120,
@@ -110,10 +113,8 @@ class _SignupScreenState extends State<SignupScreen> {
                         backgroundColor:
                             _role == role ? Colors.blue : Colors.grey,
                       ),
-                      child: Text(
-                        role,
-                        style: GoogleFonts.poppins(color: Colors.white),
-                      ),
+                      child: Text(role,
+                          style: GoogleFonts.poppins(color: Colors.white)),
                     ),
                 ],
               ),
@@ -127,16 +128,28 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 15),
 
-              // Name Field
+              // First Name Field
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  onChanged: (value) => _name = value,
+                  onChanged: (value) => _firstName = value,
                   decoration: InputDecoration(
-                    labelText: "Name",
+                    labelText: "First Name",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+                        borderRadius: BorderRadius.circular(25)),
+                  ),
+                ),
+              ),
+
+              // Last Name Field
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (value) => _lastName = value,
+                  decoration: InputDecoration(
+                    labelText: "Last Name",
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25)),
                   ),
                 ),
               ),
@@ -149,8 +162,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+                        borderRadius: BorderRadius.circular(25)),
                   ),
                 ),
               ),
@@ -164,8 +176,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+                        borderRadius: BorderRadius.circular(25)),
                   ),
                 ),
               ),
@@ -179,8 +190,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     labelText: "Confirm Password",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+                        borderRadius: BorderRadius.circular(25)),
                   ),
                 ),
               ),
@@ -191,17 +201,16 @@ class _SignupScreenState extends State<SignupScreen> {
                 height: 65,
                 width: 267,
                 child: ElevatedButton(
-                    onPressed: _signUp,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                    ),
-                    child: Text(
-                      "Sign Up",
-                      style: GoogleFonts.poppins(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
-                    )),
+                  onPressed: _signUp,
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  child: Text(
+                    "Sign Up",
+                    style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
               ),
             ],
           ),

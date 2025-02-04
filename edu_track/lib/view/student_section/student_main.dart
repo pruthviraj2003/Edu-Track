@@ -15,7 +15,7 @@ class _StudentMainState extends State<StudentMain> {
   int selectedIndex = 0;
 
   List page = [
-    HomePage(),
+    StudentPage(),
     SubjectPage(),
     CalenderPage(),
     ProfilePage(),
