@@ -13,6 +13,9 @@ dependencies:
   firebase_core: ^3.10.1
   cloud_firestore: ^5.6.2
   firebase_auth: ^5.4.1
+  table_calendar: ^3.0.9
+  image_picker: ^1.0.7
+  firebase_storage: ^12.4.2
 
 
 dev_dependencies:
